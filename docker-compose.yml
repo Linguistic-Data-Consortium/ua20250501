@@ -17,26 +17,26 @@ services:
       - RAILS_ENV=development
       - VITE_RUBY_HOST=vite
     # command: sleep 300
-  # vite:
-  #   build:
-  #     context: .
-  #     target: dev
-  #   # entrypoint: ./docker-vite-entrypoint.sh
-  #   # command: bunx --bun vite
-  #   command: bunx vite
-  #   ports:
-  #     - 3036:3036
-  #   volumes:
-  #     - .:/ua
-  #     - gem_cache:/gems
-  #   env_file:
-  #     - .envv/development/database
-  #     - .envv/development/web
-  #     - .envv/development/aws
-  #   environment:
-  #     - DEBUG='*vite*'
-  #     - RAILS_ENV=development
-  #     - VITE_RUBY_HOST=0.0.0.0
+  vite:
+    build:
+      context: .
+      target: dev
+    # entrypoint: ./docker-vite-entrypoint.sh
+    # command: bunx --bun vite
+    command: bunx vite
+    ports:
+      - 3036:3036
+    volumes:
+      - .:/rails
+      - gem_cache:/gems
+    # env_file:
+    #   - .envv/development/database
+    #   - .envv/development/web
+    #   - .envv/development/aws
+    environment:
+      - DEBUG='*vite*'
+      - RAILS_ENV=development
+      - VITE_RUBY_HOST=0.0.0.0
   # database:
   #   image: postgres
   #   ports:

@@ -121,3 +121,4 @@ gem 'image_processing', '~> 1.2'
 # gem "tailwindcss-rails", "2.7.8"
 
 gem "jsbundling-rails", "~> 1.2"
+gem "tailwindcss-rails", "~> 4.2"
