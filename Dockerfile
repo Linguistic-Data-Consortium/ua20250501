@@ -18,15 +18,19 @@ WORKDIR /rails
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
+RUN apt-get update -yqq && apt-get install -yqq --no-install-recommends apt-transport-https netcat-openbsd libpq5 libpq-dev unzip
+#RUN curl -sL https://deb.nodesource.com/setup_21.x | bash -
+#RUN apt-get update -yqq && apt-get install -yqq --no-install-recommends nodejs
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+# use bun instead of node
+RUN curl -fsSL https://bun.sh/install | bash
+ENV BUN_INSTALL="/root/.bun"
+ENV PATH="$BUN_INSTALL/bin:$PATH"
 
 # Throw-away build stage to reduce size of final image
-FROM base AS build
+# FROM base AS build
+### split into bundled and build
+FROM base AS gem
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
@@ -34,7 +38,21 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
-COPY Gemfile Gemfile.lock ./
+COPY Gemfile* ./
+
+### when changing the Gemfile, target lock in the compose file
+FROM gem AS lock
+RUN bundle install
+RUN bundle lock --add-platform x86_64-linux
+
+FROM gem AS bundled
+
+# Set production environment
+ENV RAILS_ENV="production" \
+    BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_PATH="/usr/local/bundle" \
+    BUNDLE_WITHOUT="development"
+
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
@@ -45,6 +63,7 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
+FROM bundled AS build
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
@@ -70,3 +89,14 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 # Start server via Thruster by default, this can be overwritten at runtime
 EXPOSE 80
 CMD ["./bin/thrust", "./bin/rails", "server"]
+
+### the above mostly comes from rails, we'll build on it below
+
+### create a dev version
+FROM bundled AS dev
+# COPY . .
+# RUN bundle exec bootsnap precompile app/ lib/
+# ENTRYPOINT ["./docker-entrypoint.sh"]
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+CMD ["bin/rails", "s", "-b", "0.0.0.0"]
+#CMD ["sleep", "300"]

@@ -6,9 +6,22 @@ if [ -z "${LD_PRELOAD+x}" ]; then
     export LD_PRELOAD
 fi
 
+set -e
+mkdir -p tmp
+if [ -f tmp/pids/server.pid ]; then
+    rm tmp/pids/server.pid
+fi
+
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   ./bin/rails db:prepare
+fi
+
+if [ ! -d "node_modules" ]; then
+    bun install
+fi
+if [ ! -d "app/assets/stylesheets" ]; then
+    bin/rails tailwindcss:install
 fi
 
 exec "${@}"
