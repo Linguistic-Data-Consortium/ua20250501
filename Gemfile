@@ -68,7 +68,7 @@ gem 'vite_rails', '3.0.19'
 gem "autoprefixer-rails", '~> 6.5.1'
 gem 'bourbon', '7.0.0'
 gem 'neat', '1.7.4'
-gem 'le', '2.2.6'
+gem 'le', '2.7.6'
 
 
 gem 'haml', '5.1.2'
