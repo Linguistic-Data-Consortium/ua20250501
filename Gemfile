@@ -74,7 +74,7 @@ gem 'le', '2.2.6'
 gem 'haml', '5.1.2'
 gem 'jquery-rails-cdn', '1.1.2'
 
-gem 'paper_trail', '12.2.0'
+gem 'paper_trail', '16.0.0'
 # gem 'paper_trail-association_tracking'
 
 gem "aws-sdk-rails", '~> 3'
