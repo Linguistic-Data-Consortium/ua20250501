@@ -173,8 +173,9 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    haml (5.1.2)
-      temple (>= 0.8.0)
+    haml (6.3.0)
+      temple (>= 0.8.2)
+      thor
       tilt
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
@@ -509,7 +510,7 @@ DEPENDENCIES
   brakeman
   capybara
   debug
-  haml (= 5.1.2)
+  haml (= 6.3.0)
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
