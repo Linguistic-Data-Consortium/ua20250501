@@ -77,7 +77,7 @@ gem 'jquery-rails-cdn', '1.1.2'
 gem 'paper_trail', '12.2.0'
 # gem 'paper_trail-association_tracking'
 
-gem "aws-sdk-rails", '~> 3'
+gem "aws-sdk-rails", '~> 5'
 gem "aws-sdk-s3", '~> 1'
 gem "aws-sdk-cognitoidentity", "~> 1.31"
 
