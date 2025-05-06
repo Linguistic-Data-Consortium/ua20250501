@@ -71,7 +71,7 @@ gem 'neat', '1.7.4'
 gem 'le', '2.2.6'
 
 
-gem 'haml', '5.1.2'
+gem 'haml', '6.3.0'
 gem 'jquery-rails-cdn', '1.1.2'
 
 gem 'paper_trail', '12.2.0'
