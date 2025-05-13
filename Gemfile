@@ -79,7 +79,7 @@ gem 'paper_trail', '12.2.0'
 
 gem "aws-sdk-rails", '~> 3'
 gem "aws-sdk-s3", '~> 1'
-gem "aws-sdk-cognitoidentity", "~> 1.31"
+gem "aws-sdk-cognitoidentity", "~> 1.73"
 
 # for project pagination
 gem 'kaminari'
